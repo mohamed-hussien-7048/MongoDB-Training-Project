@@ -1,0 +1,809 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b1020">
+    <title>FAHD 6 | إدارة الأشخاص</title>
+
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg: #0b1020;
+            --panel: #121a2b;
+            --panel-light: #19243a;
+            --border: #26334b;
+            --text: #f0f5ff;
+            --muted: #93a4bf;
+            --cyan: #42d9f5;
+            --green: #3ee6a8;
+            --red: #ff6685;
+            --purple: #a78bfa;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                radial-gradient(ellipse at top right, #15304b 0, transparent 38%),
+                var(--bg);
+            color: var(--text);
+            font-family: Tahoma, Arial, sans-serif;
+        }
+
+        button, input {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .container {
+            width: min(1150px, 94%);
+            margin: auto;
+            padding: 35px 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo {
+            display: grid;
+            place-items: center;
+            width: 54px;
+            height: 54px;
+            border-radius: 17px;
+            color: #07121e;
+            background: linear-gradient(135deg, var(--cyan), var(--green));
+            font-weight: 900;
+            font-size: 20px;
+            box-shadow: 0 8px 30px #42d9f52b;
+        }
+
+        h1 {
+            font-size: clamp(22px, 4vw, 30px);
+            margin: 0 0 7px;
+        }
+
+        .subtitle, .muted {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--border);
+            background: #121a2b;
+            padding: 10px 14px;
+            border-radius: 30px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat, .panel {
+            background: linear-gradient(145deg, #151f33, #101727);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: 0 12px 40px #00000012;
+        }
+
+        .stat {
+            padding: 22px;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .stat-value {
+            font-size: clamp(22px, 3vw, 30px);
+            font-weight: 800;
+            overflow-wrap: anywhere;
+        }
+
+        .cyan { color: var(--cyan); }
+        .green { color: var(--green); }
+        .purple { color: var(--purple); }
+
+        .panel {
+            padding: 24px;
+            margin-bottom: 22px;
+        }
+
+        .panel-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 22px;
+        }
+
+        h2 {
+            font-size: 18px;
+            margin: 0 0 7px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 14px;
+            align-items: end;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 9px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .field input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #0b1221;
+            color: var(--text);
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        .field input:focus {
+            border-color: var(--cyan);
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 12px;
+            padding: 12px 17px;
+            font-weight: 700;
+            transition: transform .2s, opacity .2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            cursor: not-allowed;
+            opacity: .55;
+            transform: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--cyan), #76f0cf);
+            color: #07121e;
+        }
+
+        .btn-secondary {
+            background: var(--panel-light);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-danger {
+            background: #401d2b;
+            color: #ff9bb0;
+            border: 1px solid #6b293e;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .search {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th, td {
+            text-align: right;
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        th {
+            background: #19243a;
+            color: var(--muted);
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        tbody tr:hover {
+            background: #ffffff05;
+        }
+
+        .person-name {
+            font-weight: 700;
+        }
+
+        .balance {
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-small {
+            padding: 8px 11px;
+            border-radius: 9px;
+            font-size: 12px;
+        }
+
+        .message {
+            display: none;
+            margin-bottom: 18px;
+            padding: 13px 16px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.success {
+            color: var(--green);
+            border-color: #235844;
+            background: #103326;
+        }
+
+        .message.error {
+            color: #ff9bb0;
+            border-color: #6b293e;
+            background: #351622;
+        }
+
+        .empty {
+            padding: 35px 15px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 12px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        @media (max-width: 760px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .stat {
+                padding: 18px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .panel {
+                padding: 17px;
+            }
+
+            .header {
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <header class="header">
+            <div class="brand">
+                <div class="logo">F6</div>
+                <div>
+                    <h1>إدارة الأشخاص</h1>
+                    <div class="subtitle">FAHD 6 · نظام إدارة الأرصدة</div>
+                </div>
+            </div>
+
+            <div class="status">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="connectionStatus">جاري الاتصال بالسيرفر...</span>
+            </div>
+        </header>
+
+        <div id="message" class="message" role="status" aria-live="polite"></div>
+
+        <section class="stats">
+            <article class="stat">
+                <div class="stat-label">إجمالي الأشخاص</div>
+                <div class="stat-value cyan" id="peopleCount">—</div>
+            </article>
+
+            <article class="stat">
+                <div class="stat-label">إجمالي الأرصدة</div>
+                <div class="stat-value green" id="totalBalance">—</div>
+            </article>
+
+            <article class="stat">
+                <div class="stat-label">متوسط الرصيد</div>
+                <div class="stat-value purple" id="averageBalance">—</div>
+            </article>
+        </section>
+
+        <section class="panel">
+            <div class="panel-heading">
+                <div>
+                    <h2 id="formTitle">إضافة شخص جديد</h2>
+                    <div class="subtitle">أدخل الاسم والرصيد لإضافتهما إلى قاعدة البيانات</div>
+                </div>
+            </div>
+
+            <form id="personForm">
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="name">اسم الشخص</label>
+                        <input
+                            id="name"
+                            name="name"
+                            type="text"
+                            maxlength="100"
+                            placeholder="اكتب الاسم"
+                            autocomplete="name"
+                            required
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="balance">الرصيد</label>
+                        <input
+                            id="balance"
+                            name="balance"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            placeholder="0.00"
+                            required
+                        >
+                    </div>
+
+                    <div class="actions">
+                        <button class="btn btn-primary" id="submitButton" type="submit">
+                            إضافة الشخص
+                        </button>
+                        <button class="btn btn-secondary" id="cancelButton" type="button" hidden>
+                            إلغاء
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <section class="panel">
+            <div class="panel-heading">
+                <div>
+                    <h2>قائمة الأشخاص</h2>
+                    <div class="subtitle">إدارة بيانات الأشخاص المسجلة في MongoDB</div>
+                </div>
+
+                <button class="btn btn-secondary" id="refreshButton" type="button">
+                    تحديث البيانات
+                </button>
+            </div>
+
+            <div class="toolbar">
+                <div class="field search">
+                    <label for="searchInput">بحث</label>
+                    <input id="searchInput" type="search" placeholder="ابحث باسم الشخص...">
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>الاسم</th>
+                            <th>الرصيد</th>
+                            <th>تاريخ الإضافة</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="peopleTable">
+                        <tr>
+                            <td colspan="5" class="empty">جاري تحميل البيانات...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer class="footer">
+            FAHD 6 · Node.js · Express · MongoDB
+        </footer>
+    </main>
+
+    <script>
+        const API_URL = "/people";
+
+        const personForm = document.getElementById("personForm");
+        const nameInput = document.getElementById("name");
+        const balanceInput = document.getElementById("balance");
+        const peopleTable = document.getElementById("peopleTable");
+        const searchInput = document.getElementById("searchInput");
+        const submitButton = document.getElementById("submitButton");
+        const cancelButton = document.getElementById("cancelButton");
+        const refreshButton = document.getElementById("refreshButton");
+        const formTitle = document.getElementById("formTitle");
+        const message = document.getElementById("message");
+        const connectionStatus = document.getElementById("connectionStatus");
+        const statusDot = document.getElementById("statusDot");
+
+        let people = [];
+        let editingId = null;
+        let messageTimeout;
+
+        function showMessage(text, type = "success") {
+            clearTimeout(messageTimeout);
+            message.textContent = text;
+            message.className = `message show ${type}`;
+
+            messageTimeout = setTimeout(() => {
+                message.className = "message";
+            }, 4500);
+        }
+
+        function setConnectionStatus(connected) {
+            connectionStatus.textContent = connected
+                ? "السيرفر متصل"
+                : "تعذر الاتصال بالسيرفر";
+
+            statusDot.style.background = connected ? "var(--green)" : "var(--red)";
+        }
+
+        async function request(url, options = {}) {
+            const response = await fetch(url, {
+                ...options,
+                headers: {
+                    "Content-Type": "application/json",
+                    ...options.headers
+                }
+            });
+
+            const data = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                throw new Error(data.message || "حدث خطأ أثناء تنفيذ الطلب");
+            }
+
+            return data;
+        }
+
+        function formatNumber(value) {
+            return new Intl.NumberFormat("ar-EG", {
+                maximumFractionDigits: 2
+            }).format(value);
+        }
+
+        function formatDate(value) {
+            if (!value) return "—";
+
+            const date = new Date(value);
+
+            if (Number.isNaN(date.getTime())) return "—";
+
+            return new Intl.DateTimeFormat("ar-EG", {
+                year: "numeric",
+                month: "short",
+                day: "numeric"
+            }).format(date);
+        }
+
+        function updateStatistics() {
+            const total = people.reduce(
+                (sum, person) => sum + Number(person.balance || 0),
+                0
+            );
+
+            const average = people.length ? total / people.length : 0;
+
+            document.getElementById("peopleCount").textContent =
+                formatNumber(people.length);
+
+            document.getElementById("totalBalance").textContent =
+                formatNumber(total);
+
+            document.getElementById("averageBalance").textContent =
+                formatNumber(average);
+        }
+
+        function createCell(text, className = "") {
+            const cell = document.createElement("td");
+            cell.textContent = text;
+
+            if (className) {
+                cell.className = className;
+            }
+
+            return cell;
+        }
+
+        function createActionButton(text, className, handler) {
+            const button = document.createElement("button");
+
+            button.type = "button";
+            button.textContent = text;
+            button.className = `btn btn-small ${className}`;
+            button.addEventListener("click", handler);
+
+            return button;
+        }
+
+        function renderPeople() {
+            const searchTerm = searchInput.value.trim().toLocaleLowerCase();
+
+            const filteredPeople = people.filter(person =>
+                String(person.name || "")
+                    .toLocaleLowerCase()
+                    .includes(searchTerm)
+            );
+
+            peopleTable.replaceChildren();
+
+            if (!filteredPeople.length) {
+                const row = document.createElement("tr");
+                const cell = document.createElement("td");
+
+                cell.colSpan = 5;
+                cell.className = "empty";
+                cell.textContent = people.length
+                    ? "لا توجد نتائج مطابقة للبحث"
+                    : "لا يوجد أشخاص حتى الآن. أضف أول شخص من النموذج بالأعلى.";
+
+                row.appendChild(cell);
+                peopleTable.appendChild(row);
+                updateStatistics();
+                return;
+            }
+
+            filteredPeople.forEach((person, index) => {
+                const row = document.createElement("tr");
+
+                row.appendChild(createCell(formatNumber(index + 1)));
+                row.appendChild(createCell(person.name, "person-name"));
+                row.appendChild(createCell(
+                    formatNumber(Number(person.balance || 0)),
+                    "balance"
+                ));
+                row.appendChild(createCell(formatDate(person.createdAt)));
+
+                const actionsCell = document.createElement("td");
+                const actions = document.createElement("div");
+                actions.className = "actions";
+
+                actions.appendChild(createActionButton(
+                    "تعديل",
+                    "btn-secondary",
+                    () => startEditing(person)
+                ));
+
+                actions.appendChild(createActionButton(
+                    "حذف",
+                    "btn-danger",
+                    () => removePerson(person._id)
+                ));
+
+                actionsCell.appendChild(actions);
+                row.appendChild(actionsCell);
+                peopleTable.appendChild(row);
+            });
+
+            updateStatistics();
+        }
+
+
+        async function loadPeople() {
+            refreshButton.disabled = true;
+
+            try {
+                const response = await request(API_URL);
+
+                if (!response.success || !Array.isArray(response.data)) {
+                    throw new Error("تنسيق البيانات المستلمة من السيرفر غير متوقع");
+                }
+
+                people = response.data;
+
+                setConnectionStatus(true);
+                renderPeople();
+            } catch (error) {
+                setConnectionStatus(false);
+
+                peopleTable.replaceChildren();
+
+                const row = document.createElement("tr");
+                const cell = document.createElement("td");
+
+                cell.colSpan = 5;
+                cell.className = "empty";
+                cell.textContent =
+                    "تعذر تحميل البيانات. تأكد من تشغيل السيرفر وقاعدة البيانات.";
+
+                row.appendChild(cell);
+                peopleTable.appendChild(row);
+
+                showMessage(error.message, "error");
+            } finally {
+                refreshButton.disabled = false;
+            }
+        }
+
+        function resetForm() {
+            personForm.reset();
+            editingId = null;
+            formTitle.textContent = "إضافة شخص جديد";
+            submitButton.textContent = "إضافة الشخص";
+            cancelButton.hidden = true;
+        }
+
+        function startEditing(person) {
+            editingId = person._id;
+            nameInput.value = person.name;
+            balanceInput.value = person.balance;
+            formTitle.textContent = "تعديل بيانات الشخص";
+            submitButton.textContent = "حفظ التعديلات";
+            cancelButton.hidden = false;
+
+            personForm.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+
+            nameInput.focus();
+        }
+
+        async function savePerson(event) {
+            event.preventDefault();
+
+            const name = nameInput.value.trim();
+            const balance = Number(balanceInput.value);
+
+            if (!name) {
+                showMessage("اكتب اسم الشخص أولًا.", "error");
+                nameInput.focus();
+                return;
+            }
+
+            if (
+                balanceInput.value.trim() === "" ||
+                !Number.isFinite(balance) ||
+                balance < 0
+            ) {
+                showMessage("أدخل رصيدًا صحيحًا لا يقل عن صفر.", "error");
+                balanceInput.focus();
+                return;
+            }
+
+            const isEditing = Boolean(editingId);
+            const url = isEditing
+                ? `${API_URL}/${encodeURIComponent(editingId)}`
+                : API_URL;
+
+            submitButton.disabled = true;
+
+            try {
+                await request(url, {
+                    method: isEditing ? "PUT" : "POST",
+                    body: JSON.stringify({ name, balance })
+                });
+
+                resetForm();
+                await loadPeople();
+
+                showMessage(
+                    isEditing
+                        ? "تم تعديل بيانات الشخص بنجاح."
+                        : "تمت إضافة الشخص بنجاح."
+                );
+            } catch (error) {
+                showMessage(error.message, "error");
+            } finally {
+                submitButton.disabled = false;
+            }
+        }
+
+        async function removePerson(id) {
+            const person = people.find(item => item._id === id);
+
+            if (!person) return;
+
+            const confirmed = confirm(
+                `هل أنت متأكد من حذف "${person.name}"؟ لا يمكن التراجع عن هذا الإجراء.`
+            );
+
+            if (!confirmed) return;
+
+            try {
+                await request(`${API_URL}/${encodeURIComponent(id)}`, {
+                    method: "DELETE"
+                });
+
+                if (editingId === id) {
+                    resetForm();
+                }
+
+                await loadPeople();
+                showMessage("تم حذف الشخص بنجاح.");
+            } catch (error) {
+                showMessage(error.message, "error");
+            }
+        }
+
+        personForm.addEventListener("submit", savePerson);
+        cancelButton.addEventListener("click", resetForm);
+        refreshButton.addEventListener("click", loadPeople);
+        searchInput.addEventListener("input", renderPeople);
+
+        loadPeople();
+    </script>
+</body>
+</html>
